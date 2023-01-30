@@ -2,46 +2,54 @@
 
 @section('content')
 
-{{--Keep original image ratio--}}
+
 <style>
-    .card-img-top {
-        height: 200px !important;
-        object-fit: cover !important;
+    .center-div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        @if(!isset($games) || count($games) == 0)
+        height: 90vh;
+        @endif
+        justify-content: center;
+        margin: 0 20px;
+    }
+
+    .big-title{
+        margin-bottom: 20px;
     }
 </style>
 
 {{--Search Bar--}}
-<input placeholder='nome gioco' id="search-bar" value="{{$search_string}}"/>
-<button onclick='search()'>
-    Cerca
-</button>
+<div class="center-div">
+    <h1 class="big-title">Cerca un gioco da aggiungere alla tua libreria</h1>
+    <div class="input-group" style="max-width: 500px;">
+        <input id="search-bar" value="{{$search_string}}" type="search" class="form-control" placeholder="Cerca tra i giochi...">
+        <button onclick="search()" id="search-button" type="button" class="btn btn-primary">
+            <i class="fa fa-search"></i>
+        </button>
+    </div>
+</div>
 
 {{--Results list--}}
+@if(isset($games) && count($games) > 0)
 <div class="container my-5">
     <h1 class="text-center">Risultati</h1>
     <div class="row">
-        @if(isset($games))
-            @foreach($games as $game)
-                <div class="col-md-4 mb-5">
-                    <div class="card">
-                        <img src="{{$game->background_image}}" class="card-img-top" alt="..."/>
-                        <div class="card-body">
-                            <h5 class="card-title">{{$game->name}}</h5>
-                            <p class="card-text fw-bold">
-                                @if(isset($game->platforms))
-                                    @foreach($game->platforms as $platform)
-                                        {{$platform->platform->name}}
-                                    @endforeach
-                                @endif
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        @endif
+        @foreach($games as $game)
 
+            @php
+                //Array to string
+                $platform_names = "";
+                foreach($game->platforms as $platform)
+                    $platform_names .= $platform->platform->name .= " ";
+            @endphp
+
+            <x-gamecell name="{{$game->name}}" image="{{$game->background_image}}" desc="{{$platform_names}}" id="{{$game->id}}" action="search" method="POST"/>
+        @endforeach
     </div>
 </div>
+@endif
 
 <script>
     function search(){

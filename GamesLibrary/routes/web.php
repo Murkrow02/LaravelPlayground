@@ -24,7 +24,6 @@ Route::get('/', function () {
 
 //Game search
 Route::resource('/search', GameSearchController::class)->middleware(['auth', 'verified']);
-Route::post('/search_game', [GameSearchController::class, 'index', ['key' => 'asd']])->middleware(['auth', 'verified']);
 
 //Game library
 Route::resource('/library', GameLibraryController::class)->middleware(['auth', 'verified']);
