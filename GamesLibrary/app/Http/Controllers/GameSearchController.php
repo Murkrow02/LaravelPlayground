@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class GameSearchController extends Controller
 {
@@ -17,14 +18,14 @@ class GameSearchController extends Controller
         if(!empty($search_string)){
 
             //Download results from API
-//            $response = Http::get('https://api.rawg.io/api/games', [
-//                'key' => 'aeb75cc9d0ef4788ab6e1733db510654',
-//                'search' => $search_string,
-//            ]);
-//
-//            //Deserialize JSON
-//            $json = json_decode($response);
-//            $results = $json->results;
+            $response = Http::get('https://api.rawg.io/api/games', [
+                'key' => 'aeb75cc9d0ef4788ab6e1733db510654',
+                'search' => $search_string,
+            ]);
+
+            //Deserialize JSON
+            $json = json_decode($response);
+            $results = $json->results;
         }
 
         //Packet data in key/value

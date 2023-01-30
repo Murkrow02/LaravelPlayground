@@ -1,148 +1,53 @@
 @extends('layouts.app')
 
 @section('content')
+
+{{--Keep original image ratio--}}
+<style>
+    .card-img-top {
+        height: 200px !important;
+        object-fit: cover !important;
+    }
+</style>
+
+{{--Search Bar--}}
 <input placeholder='nome gioco' id="search-bar" value="{{$search_string}}"/>
 <button onclick='search()'>
     Cerca
 </button>
 
-
+{{--Results list--}}
 <div class="container my-5">
     <h1 class="text-center">Risultati</h1>
     <div class="row">
-        <div class="col-md-4 mb-5">
-            <div class="card">
-                <img
-                    src="https://via.placeholder.com/300x200"
-                    class="card-img-top"
-                    alt="..."
-                />
-                <div class="card-body">
-                    <h5 class="card-title">Title 1</h5>
-                    <p class="card-text">
-                        Description of Title 1
-                    </p>
+        @if(isset($games))
+            @foreach($games as $game)
+                <div class="col-md-4 mb-5">
+                    <div class="card">
+                        <img src="{{$game->background_image}}" class="card-img-top" alt="..."/>
+                        <div class="card-body">
+                            <h5 class="card-title">{{$game->name}}</h5>
+                            <p class="card-text fw-bold">
+                                @if(isset($game->platforms))
+                                    @foreach($game->platforms as $platform)
+                                        {{$platform->platform->name}}
+                                    @endforeach
+                                @endif
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-5">
-            <div class="card">
-                <img
-                    src="https://via.placeholder.com/300x200"
-                    class="card-img-top"
-                    alt="..."
-                />
-                <div class="card-body">
-                    <h5 class="card-title">Title 2</h5>
-                    <p class="card-text">
-                        Description of Title 2
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-5">
-            <div class="card">
-                <img
-                    src="https://via.placeholder.com/300x200"
-                    class="card-img-top"
-                    alt="..."
-                />
-                <div class="card-body">
-                    <h5 class="card-title">Title 3</h5>
-                    <p class="card-text">
-                        Description of Title 3
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-5">
-            <div class="card">
-                <img
-                    src="https://via.placeholder.com/300x200"
-                    class="card-img-top"
-                    alt="..."
-                />
-                <div class="card-body">
-                    <h5 class="card-title">Title 3</h5>
-                    <p class="card-text">
-                        Description of Title 3
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-5">
-            <div class="card">
-                <img
-                    src="https://via.placeholder.com/300x200"
-                    class="card-img-top"
-                    alt="..."
-                />
-                <div class="card-body">
-                    <h5 class="card-title">Title 3</h5>
-                    <p class="card-text">
-                        Description of Title 3
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-5">
-            <div class="card">
-                <img
-                    src="https://via.placeholder.com/300x200"
-                    class="card-img-top"
-                    alt="..."
-                />
-                <div class="card-body">
-                    <h5 class="card-title">Title 3</h5>
-                    <p class="card-text">
-                        Description of Title 3
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-5">
-            <div class="card">
-                <img
-                    src="https://via.placeholder.com/300x200"
-                    class="card-img-top"
-                    alt="..."
-                />
-                <div class="card-body">
-                    <h5 class="card-title">Title 3</h5>
-                    <p class="card-text">
-                        Description of Title 3
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-5">
-            <div class="card">
-                <img
-                    src="https://via.placeholder.com/300x200"
-                    class="card-img-top"
-                    alt="..."
-                />
-                <div class="card-body">
-                    <h5 class="card-title">Title 3</h5>
-                    <p class="card-text">
-                        Description of Title 3
-                    </p>
-                </div>
-            </div>
-        </div>
+            @endforeach
+        @endif
+
     </div>
 </div>
 
-
-@if(isset($games))
-    {{--            @foreach($games as $game)--}}
-    {{--                --}}
-    {{--            @endforeach--}}
-@endif
-
 <script>
     function search(){
-        window.location.search += '&key=' + document.getElementById("search-bar").value;
+        let searchParams = new URLSearchParams(window.location.search);
+        searchParams.set("key", document.getElementById("search-bar").value);
+        window.location.search = searchParams.toString();
     }
 </script>
 
